@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8" />
+  <title>Wegdeel – BGT Objectenhandboek ECGeo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root {
+      --bg: #f5f7fa;
+      --bg-alt: #ffffff;
+      --accent: #0066aa;
+      --accent-soft: #e5f2fb;
+      --text: #023672;
+      --text-muted: #666666;
+      --border: #d0d6e0;
+      --shadow-soft: 0 2px 6px rgba(0,0,0,0.08);
+      --radius: 8px;
+      --radius-large: 10px;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+
+    header {
+      background: var(--bg-alt);
+      border-bottom: 1px solid var(--border);
+      box-shadow: var(--shadow-soft);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .header-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 1rem 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    /* Logo-styling (zelfde als index, 48px) */
+    .logo {
+      height: 48px;
+      margin-right: 0.5rem;
+      display: block;
+    }
+
+    .site-title {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .site-title h1 {
+      margin: 0;
+      font-size: 1.4rem;
+      font-weight: 600;
+    }
+
+    .site-title span {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      display: block;
+      margin-top: -4px;
+    }
+
+    nav.main-nav {
+      display: flex;
+      gap: 1rem;
+      font-size: 0.95rem;
+    }
+
+    nav.main-nav a {
+      padding: 0.4rem 0.6rem;
+      border-radius: 999px;
+    }
+
+    nav.main-nav a:hover {
+      background: var(--accent-soft);
+      text-decoration: none;
+    }
+
+    .layout {
+      max-width: 1200px;
+      margin: 1.5rem auto;
+      padding: 0 1.5rem 2rem;
+      display: grid;
+      grid-template-columns: minmax(0, 260px) minmax(0, 1fr);
+      gap: 1.5rem;
+    }
+
+    aside {
+      align-self: flex-start;
+      position: sticky;
+      top: 5.5rem;
+    }
+
+    .side-card {
+      background: var(--bg-alt);
+      border-radius: var(--radius-large);
+      padding: 1rem 1.1rem;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-soft);
+      margin-bottom: 1rem;
+      font-size: 0.9rem;
+    }
+
+    .side-card h2 {
+      margin: 0 0 0.5rem;
+      font-size: 1rem;
+    }
+
+    .side-nav {
+      list-style: none;
+      padding: 0;
+      margin: 0.5rem 0 0;
+    }
+
+    .side-nav li {
+      margin-bottom: 0.2rem;
+    }
+
+    .side-nav a {
+      display: block;
+      padding: 0.3rem 0.4rem;
+      border-radius: var(--radius);
+    }
+
+    .side-nav a:hover {
+      background: var(--accent-soft);
+      text-decoration: none;
+    }
+
+    main {
+      display: flex;
+      flex-direction: column;
+      gap: 1.2rem;
+    }
+
+    .card {
+      background: var(--bg-alt);
+      border-radius: var(--radius-large);
+      padding: 1.2rem 1.4rem;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .card h2 {
+      margin-top: 0;
+      font-size: 1.2rem;
+    }
+
+    .breadcrumbs {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-bottom: 0.5rem;
+    }
+
+    .breadcrumbs a {
+      color: var(--text-muted);
+    }
+
+    .object-header {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 0.6rem;
+      align-items: flex-start;
+    }
+
+    .object-title {
+      display: flex;
+      flex-direction: column;
+      gap: 0.2rem;
+    }
+
+    .object-title h1 {
+      margin: 0;
+      font-size: 1.5rem;
+    }
+
+    .object-title span {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+
+    .object-meta {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      text-align: right;
+    }
+
+    .meta-badge {
+      display: inline-block;
+      padding: 0.12rem 0.5rem;
+      border-radius: 999px;
+      background: var(--accent-soft);
+      color: var(--accent);
+      font-size: 0.75rem;
+      margin-left: 0.25rem;
+    }
+
+    .meta-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 0.6rem;
+      margin-top: 1rem;
+      font-size: 0.9rem;
+    }
+
+    .meta-item-title {
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+
+    .tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.3rem;
+      margin-top: 0.8rem;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 0.2rem;
+      font-size: 0.9rem;
+    }
+
+    .tab-btn {
+      border: none;
+      background: transparent;
+      padding: 0.35rem 0.7rem;
+      border-radius: 999px;
+      cursor: pointer;
+      color: var(--text-muted);
+    }
+
+    .tab-btn.active {
+      background: var(--accent-soft);
+      color: var(--accent);
+    }
+
+    .section {
+      margin-top: 1rem;
+      font-size: 0.95rem;
+    }
+
+    .section h3 {
+      margin-top: 0;
+      font-size: 1rem;
+    }
+
+    .section p {
+      margin: 0.25rem 0;
+      line-height: 1.5;
+    }
+
+    .section ul {
+      margin: 0.4rem 0 0.2rem 1.1rem;
+      padding: 0;
+    }
+
+    .section li {
+      margin-bottom: 0.2rem;
+    }
+
+    .two-cols {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1rem;
+    }
+
+    .section-muted {
+      background: #f6f7fb;
+      border-radius: var(--radius);
+      padding: 0.7rem 0.8rem;
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+
+    .pill-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.3rem;
+      margin-top: 0.2rem;
+    }
+
+    .pill {
+      padding: 0.15rem 0.55rem;
+      border-radius: 999px;
+      background: #eef1f7;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 0.8rem 1.5rem 1.2rem;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      text-align: center;
+    }
+
+    @media (max-width: 880px) {
+      .layout {
+        grid-template-columns: minmax(0, 1fr);
+      }
+      aside {
+        position: static;
+      }
+      .object-meta {
+        text-align: left;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .header-inner {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      nav.main-nav {
+        flex-wrap: wrap;
+      }
+    }
+  </style>
+</head>
+<body>
+<header>
+  <div class="header-inner">
+    <div class="site-title">
+      <!-- Logo klikbaar, terug naar index.html -->
+      <a href="index.html">
+        <img src="ECGeo.jpg" alt="ECGeo logo" class="logo">
+      </a>
+      <div>
+        <h1>BGT Objectenhandboek</h1>
+        <span>ECGeo – richtlijnen voor inwinning en beheer</span>
+      </div>
+    </div>
+    <nav class="main-nav">
+      <a href="index.html">Overzicht</a>
+      <a href="index.html#objecten">Alle BGT-objecten</a>
+      <a href="index.html#woordenlijst">Woordenlijst</a>
+    </nav>
+  </div>
+</header>
+
+<div class="layout">
+  <aside>
+    <div class="side-card">
+      <div class="breadcrumbs">
+        <a href="index.html">Home</a> › <a href="index.html#objecten">BGT-objecten</a> › Wegdeel
+      </div>
+      <h2>Deze pagina</h2>
+      <ul class="side-nav">
+        <li><a href="#basis">Basisgegevens</a></li>
+        <li><a href="#afbakening">Afbakening</a></li>
+        <li><a href="#inwinning">Inwinning</a></li>
+        <li><a href="#beheer">Beheer</a></li>
+        <li><a href="#relaties">Relaties</a></li>
+        <li><a href="#voorbeelden">Voorbeelden</a></li>
+        <li><a href="#kwaliteit">Kwaliteitscontroles</a></li>
+        <li><a href="#versie">Versie & wijzigingen</a></li>
+      </ul>
+    </div>
+
+    <div class="side-card">
+      <h2>Contact & feedback</h2>
+      <p>Klopt er iets niet op deze pagina of is iets niet duidelijk?</p>
+      <p>Dien een melding in via TOPdesk of neem contact op met ECGeo.</p>
+    </div>
+  </aside>
+
+  <main>
+    <section class="card" id="basis">
+      <div class="object-header">
+        <div class="object-title">
+          <h1>Wegdeel</h1>
+          <span>BGT-object · verhard onderdeel van de weg</span>
+        </div>
+        <div class="object-meta">
+          <div>
+            Objectcode: <strong>WGL</strong>
+            <span class="meta-badge">BGT</span>
+          </div>
+          <div>Geometrie: vlak</div>
+          <div>Laatst bijgewerkt: <span id="lastUpdated">01-12-2025</span></div>
+          <div>Versie: <strong>1.0</strong></div>
+        </div>
+      </div>
+
+      <div class="meta-grid">
+        <div>
+          <div class="meta-item-title">Categorie</div>
+          <div>Verharding / Wegen</div>
+        </div>
+        <div>
+          <div class="meta-item-title">Bronhouder</div>
+          <div>Gemeente (ECGeo namens gemeenten)</div>
+        </div>
+        <div>
+          <div class="meta-item-title">Bronnen</div>
+          <div>Luchtfoto, terreinmeting, BAG, BOR</div>
+        </div>
+        <div>
+          <div class="meta-item-title">Relaties</div>
+          <div>Wegas, Kunstwerkdeel, Begroeid terreindeel, Wegmeubilair</div>
+        </div>
+      </div>
+
+      <div class="tabs">
+        <button class="tab-btn active" data-target="afbakening">Afbakening</button>
+        <button class="tab-btn" data-target="inwinning">Inwinning</button>
+        <button class="tab-btn" data-target="beheer">Beheer</button>
+        <button class="tab-btn" data-target="relaties">Relaties</button>
+        <button class="tab-btn" data-target="kwaliteit">Kwaliteitscontroles</button>
+      </div>
+    </section>
+
+    <section class="card section" id="afbakening" data-section="afbakening">
+      <h2>Afbakening</h2>
+      <div class="two-cols">
+        <div>
+          <h3>Definitie</h3>
+          <p>
+            Een <strong>wegdeel</strong> is het verhard deel van de openbare ruimte dat bestemd is voor verkeer (rijden, fietsen, lopen),
+            inclusief rijbaan, fietspad, parkeerstroken en trottoirs, voor zover deze als één logisch geheel worden beschouwd.
+          </p>
+          <p>
+            Een wegdeel wordt begrensd door aangrenzende objecten zoals <em>begroeid terreindeel</em>, <em>waterdeel</em>, bebouwing
+            of andere infrastructurele objecten.
+          </p>
+        </div>
+        <div>
+          <h3>Wat hoort er wél bij?</h3>
+          <ul>
+            <li>Rijbaanverharding, inclusief markering.</li>
+            <li>Verharde fietspaden en fietsstroken.</li>
+            <li>Verharde parkeervakken langs de weg.</li>
+            <li>Trottoirs die direct aansluiten op de weg.</li>
+          </ul>
+          <h3>Wat hoort er níet bij?</h3>
+          <ul>
+            <li>Binnenhoven die primair als erf functioneren (registreren als erf of terrein).</li>
+            <li>Onverharde paden (registreren als onbegroeid terreindeel of pad, afhankelijk van lokale keuze).</li>
+            <li>Constructies zoals brugdekken (als <em>kunstwerkdeel</em> geregistreerd).</li>
+          </ul>
+        </div>
+      </div>
+      <div class="section-muted">
+        Let op: bij complexe situaties (bijv. ongelijkvloerse kruisingen, busbanen, gecombineerde fiets-/voetpaden)
+        gelden aanvullende afbakeningsregels. Zie de interne werkinstructie “Afbakening wegdeel – complexe situaties”.
+      </div>
+    </section>
+
+    <section class="card section" id="inwinning" data-section="inwinning" style="display:none;">
+      <h2>Inwinning</h2>
+      <div class="two-cols">
+        <div>
+          <h3>Inwinmomenten</h3>
+          <ul>
+            <li>Na reconstructie van wegen (projecten civiel / BOR).</li>
+            <li>Na nieuwbouw of herinrichting van wijken en straten.</li>
+            <li>Bij signalen uit BAG, BOR of terugmeldingen van derden.</li>
+          </ul>
+          <h3>Bronnen</h3>
+          <ul>
+            <li>Recente luchtfoto (standaard jaarlijkse actualisatie).</li>
+            <li>Terreinmeting bij complexe situaties of twijfel.</li>
+            <li>Projecttekeningen (as-built) van civieltechnische projecten.</li>
+          </ul>
+        </div>
+        <div>
+          <h3>Nauwkeurigheid & specificaties</h3>
+          <ul>
+            <li>Geometrische nauwkeurigheid conform landelijke BGT-eisen.</li>
+            <li>Wegdelen sluiten naadloos aan op aangrenzende objecten (geen gaten/overlap).</li>
+            <li>Attribuutvulling volgens BGT-catalogus, aangevuld met lokale attributen waar van toepassing.</li>
+          </ul>
+          <h3>Werkwijze ECGeo</h3>
+          <p>
+            ECGeo verwerkt mutaties op basis van signalen en aangeleverde brondata. Vooraf worden eventuele
+            onduidelijkheden afgestemd met de betreffende gemeente (BOR/BAG/civiel).
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="card section" id="beheer" data-section="beheer" style="display:none;">
+      <h2>Beheer</h2>
+      <div class="two-cols">
+        <div>
+          <h3>Beheerder</h3>
+          <p>
+            ECGeo beheert de BGT-gegevens van <em>wegdeel</em> namens de deelnemende gemeenten.
+            De inhoudelijke verantwoordelijkheid ligt bij de gemeente (bijv. BOR / civiel beheer).
+          </p>
+          <h3>Mutaties</h3>
+          <ul>
+            <li>Periodieke verwerking van projectmutaties (reconstructies, nieuwbouw).</li>
+            <li>Verwerking van mutatiesignalen uit BOR en BAG (indien ingericht).</li>
+            <li>Terugmeldingen via meldingenkaart / klant / interne signalen.</li>
+          </ul>
+        </div>
+        <div>
+          <h3>Mutatieproces</h3>
+          <ol>
+            <li>Signaal/melding komt binnen (project, BOR, terugmelding, etc.).</li>
+            <li>Controle of voldoende broninformatie aanwezig is.</li>
+            <li>Inwinning/interpretatie door ECGeo.</li>
+            <li>Aanpassing in BGT en interne kwaliteitscontrole.</li>
+            <li>Terugkoppeling indien nodig naar gemeente of melder.</li>
+          </ol>
+          <h3>Bijzonderheden</h3>
+          <p>
+            Lokale keuzes (bijv. wel/geen scheiding tussen rijbaan en parkeerstrook) worden vastgelegd in
+            een aparte notitie “Lokale keuzes wegdeel” en gelden voor alle gemeenten waar dit is afgesproken.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="card section" id="relaties" data-section="relaties" style="display:none;">
+      <h2>Relaties met andere registraties en objecten</h2>
+      <div class="two-cols">
+        <div>
+          <h3>Relatie met BAG</h3>
+          <p>
+            Wegdelen liggen vaak in de openbare ruimte tussen BAG-panden en -verblijfsobjecten. Bij herinrichting
+            kan de wegstructuur wijzigen zonder dat BAG wijzigt, of andersom. Afstemming is wenselijk bij:
+          </p>
+          <ul>
+            <li>Nieuw aangelegde straten (nieuwe straatnamen / adressen).</li>
+            <li>Wijziging van verkeersfunctie (bijv. autoluw, fietsstraat).</li>
+          </ul>
+          <h3>Relatie met BOR</h3>
+          <p>
+            BOR gebruikt wegdelen vaak als basis voor beheer van verhardingen. In sommige gemeenten is een
+            koppeling ingericht tussen BGT en BOR-wegvakken.
+          </p>
+        </div>
+        <div>
+          <h3>Relatie met andere BGT-objecten</h3>
+          <div class="pill-list">
+            <span class="pill">Wegas</span>
+            <span class="pill">Kunstwerkdeel</span>
+            <span class="pill">Begroeid terreindeel</span>
+            <span class="pill">Onbegroeid terreindeel</span>
+            <span class="pill">Wegmeubilair</span>
+          </div>
+          <p style="margin-top:0.5rem;">
+            Deze objecten moeten geometrisch goed aansluiten op het wegdeel. Bijvoorbeeld:
+          </p>
+          <ul>
+            <li><strong>Kunstwerkdeel</strong> (brugdek) overlapt niet met wegdeel; wegdeel sluit aan op de rand van het kunstwerk.</li>
+            <li><strong>Begroeid terreindeel</strong> grenst aan de buitenrand van het trottoir of de berm.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="card section" id="voorbeelden">
+      <h2>Voorbeelden (praktijksituaties)</h2>
+      <div class="two-cols">
+        <div>
+          <h3>Voorbeeld 1 – woonstraat met parkeervakken</h3>
+          <p>
+            Rijbaan, langsparkeerstrook en trottoir worden als één aaneengesloten wegdeel geregistreerd,
+            zolang het functioneel één weg vormt. Indien parkeervakken duidelijk gescheiden zijn door groen
+            of obstakels, kan gekozen worden voor aparte objecten volgens lokale richtlijn.
+          </p>
+        </div>
+        <div>
+          <h3>Voorbeeld 2 – busbaan met aparte fietsstrook</h3>
+          <p>
+            Bij een vrijliggende busbaan met daarnaast een fietspad worden busbaan en fietspad als aparte
+            wegdelen geregistreerd. Als fietsstrook op de rijbaan ligt, blijft dit één wegdeel.
+          </p>
+        </div>
+      </div>
+      <div class="section-muted">
+        Hier kunnen later ook kaartfragmenten / screenshots worden toegevoegd ter illustratie, bijvoorbeeld uit de gemeentelijke kaartviewer.
+      </div>
+    </section>
+
+    <section class="card section" id="kwaliteit" data-section="kwaliteit" style="display:none;">
+      <h2>Kwaliteitscontroles</h2>
+      <div class="two-cols">
+        <div>
+          <h3>Automatische controles</h3>
+          <ul>
+            <li>Topologie: geen gaten of overlap tussen aangrenzende wegdelen.</li>
+            <li>Aansluiting op andere objecten (water, groen, bebouwing).</li>
+            <li>Controle op minimale breedte (lokale ondergrens waar van toepassing).</li>
+          </ul>
+        </div>
+        <div>
+          <h3>Visuele controles</h3>
+          <ul>
+            <li>Visuele vergelijking met luchtfoto bij grote projecten.</li>
+            <li>Spot checks in gebieden met veel mutaties.</li>
+          </ul>
+          <h3>Rapportage</h3>
+          <p>
+            Resultaten van kwaliteitscontroles worden periodiek gerapporteerd aan de deelnemende gemeenten
+            en waar nodig opgevolgd met correcties.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="card section" id="versie">
+      <h2>Versie & wijzigingen</h2>
+      <ul>
+        <li><strong>Versie 1.0 – 01-12-2025</strong>
+          <ul>
+            <li>Eerste vastgestelde versie voor alle ECGeo-gemeenten.</li>            
+          </ul>
+        </li>
+        <li><strong>Versie 0.9 – 01-12-2025</strong>
+          <ul>
+            <li>Conceptversie, gebruikt voor interne review.</li>
+          </ul>
+        </li>
+      </ul>
+      <div class="section-muted">
+        Wijzigingen in landelijke BGT-catalogus die van invloed zijn op <em>wegdeel</em> worden hier opgenomen,
+        inclusief datum van doorvoering in de ECGeo-omgeving.
+      </div>
+    </section>
+  </main>
+</div>
+
+<footer>
+  &copy; <span id="year"></span> ECGeo – BGT Objectenhandboek. Dit is een voorbeeldpagina voor het object “Wegdeel”.
+</footer>
+
+<script>
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  // Tab functionaliteit
+  const tabButtons = Array.from(document.querySelectorAll('.tab-btn'));
+  const tabSections = Array.from(document.querySelectorAll('[data-section]'));
+
+  tabButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const target = btn.dataset.target;
+
+      tabButtons.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      tabSections.forEach(sec => {
+        if (sec.dataset.section === target) {
+          sec.style.display = '';
+        } else {
+          sec.style.display = 'none';
+        }
+      });
+
+      // Scroll zachtjes naar de sectie
+      const sectionEl = document.querySelector('#' + target);
+      if (sectionEl) {
+        sectionEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    });
+  });
+</script>
+</body>
+</html>
